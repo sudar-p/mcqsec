@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soft Skills II – MCQ Question Paper (TNP 102 R01)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #f4f6f9; color: #222; }
+  .cover { background: linear-gradient(135deg, #1a237e, #283593); color: #fff; padding: 40px 30px; text-align: center; }
+  .cover h1 { font-size: 22px; font-weight: 700; letter-spacing: 1px; }
+  .cover h2 { font-size: 16px; font-weight: 400; margin-top: 8px; opacity: 0.85; }
+  .cover .meta { display: flex; justify-content: center; gap: 30px; margin-top: 20px; font-size: 13px; opacity: 0.9; }
+  .cover .meta span { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 20px; }
+  .controls { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; background: #fff; padding: 14px 20px; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 99; }
+  .controls .left { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .btn { padding: 7px 16px; border-radius: 6px; border: 1px solid #1a237e; background: #fff; color: #1a237e; font-size: 13px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+  .btn:hover { background: #1a237e; color: #fff; }
+  .btn.active { background: #1a237e; color: #fff; }
+  .btn.danger { border-color: #c62828; color: #c62828; }
+  .btn.danger:hover { background: #c62828; color: #fff; }
+  .progress { font-size: 13px; color: #555; }
+  .score-box { background: #e8f5e9; border: 1px solid #a5d6a7; color: #2e7d32; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; display: none; }
+  .main { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
+  .section-header { background: #1a237e; color: #fff; padding: 12px 18px; border-radius: 8px 8px 0 0; font-size: 15px; font-weight: 700; margin-top: 28px; margin-bottom: 0; }
+  .section-header span { font-size: 12px; font-weight: 400; opacity: 0.8; margin-left: 8px; }
+  .q-card { background: #fff; border: 1px solid #dde; border-top: none; padding: 16px 18px; transition: background 0.2s; }
+  .q-card:last-of-type { border-radius: 0 0 8px 8px; }
+  .q-card.correct-ans { background: #f1f8e9; }
+  .q-card.wrong-ans { background: #fce4ec; }
+  .q-num { font-size: 13px; font-weight: 700; color: #1a237e; margin-bottom: 6px; }
+  .q-text { font-size: 14px; line-height: 1.6; margin-bottom: 12px; color: #222; font-weight: 600; }
+  .options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media(max-width:560px){ .options { grid-template-columns: 1fr; } }
+  .opt { display: flex; align-items: flex-start; gap: 8px; padding: 8px 12px; border-radius: 6px; border: 1px solid #ccd; cursor: pointer; font-size: 13px; transition: all 0.18s; background: #fafafa; }
+  .opt:hover { border-color: #1a237e; background: #e8eaf6; }
+  .opt.selected { border-color: #1a237e; background: #e8eaf6; }
+  .opt.correct { border-color: #2e7d32; background: #e8f5e9; color: #1b5e20; font-weight: 700; }
+  .opt.wrong { border-color: #c62828; background: #fce4ec; color: #b71c1c; }
+  .opt-letter { font-weight: 700; color: #1a237e; min-width: 16px; }
+  .opt.correct .opt-letter { color: #2e7d32; }
+  .opt.wrong .opt-letter { color: #c62828; }
+  .explanation { font-size: 12px; color: #555; margin-top: 8px; padding: 6px 10px; background: #f5f5f5; border-left: 3px solid #1a237e; border-radius: 0 4px 4px 0; display: none; }
+  .filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .topic-btn { padding: 5px 12px; border-radius: 16px; border: 1px solid #888; background: #fff; color: #555; font-size: 12px; cursor: pointer; }
+  .topic-btn:hover, .topic-btn.active { background: #1a237e; color: #fff; border-color: #1a237e; }
+  .summary { display: none; background: #fff; border-radius: 10px; padding: 28px; text-align: center; margin: 24px 0; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .summary h2 { font-size: 20px; color: #1a237e; margin-bottom: 16px; }
+  .summary .big { font-size: 48px; font-weight: 700; color: #1a237e; }
+  .summary .sub { color: #555; font-size: 14px; margin-top: 4px; }
+  .summary .stats { display: flex; justify-content: center; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+  .summary .stat { padding: 12px 20px; border-radius: 8px; font-size: 13px; }
+  .stat.c { background: #e8f5e9; color: #2e7d32; }
+  .stat.w { background: #fce4ec; color: #c62828; }
+  .stat.s { background: #e8eaf6; color: #1a237e; }
+  .timer { font-size: 13px; color: #555; background: #f3f3f3; padding: 5px 12px; border-radius: 16px; }
+  #topBtn { position: fixed; bottom: 24px; right: 24px; background: #1a237e; color: #fff; border: none; border-radius: 50%; width: 44px; height: 44px; font-size: 20px; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.2); display: none; z-index: 999; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>SOFT SKILLS II &nbsp;|&nbsp; TNP 102 R01</h1>
+  <h2>Model Question Paper &nbsp;•&nbsp; Academic Year 2024–2025</h2>
+  <div class="meta">
+    <span>Total Questions: 150</span>
+    <span>Topics: 11</span>
+    <span>Time: 150 Min (1 per Q)</span>
+    <span>Max Marks: 150</span>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="left">
+    <button class="btn active" onclick="toggleAll()">Show All</button>
+    <button class="btn" onclick="revealAll()">Reveal Answers</button>
+    <button class="btn danger" onclick="resetAll()">Reset</button>
+    <div class="timer" id="timer">⏱ 00:00</div>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <div class="score-box" id="scoreBox">Score: 0 / 0</div>
+    <span class="progress" id="progress">Answered: 0 / 150</span>
+    <button id="submitBtn" class="btn" onclick="submitExam()">Submit & Score</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="filter-row" id="filterRow"></div>
+  <div class="summary" id="summary">
+    <h2>Your Result</h2>
+    <div class="big" id="sumPct">0%</div>
+    <div class="sub" id="sumGrade"></div>
+    <div class="stats">
+      <div class="stat c" id="sumC">✔ Correct: 0</div>
+      <div class="stat w" id="sumW">✘ Wrong: 0</div>
+      <div class="stat s" id="sumS">– Skipped: 0</div>
+    </div>
+  </div>
+  <div id="qContainer"></div>
+</div>
+
+<button id="topBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+const TOPICS = [
+  { id: 1, name: "Employers Expectation & Selection Process" },
+  { id: 2, name: "Case Studies" },
+  { id: 3, name: "My Dream Employer" },
+  { id: 4, name: "Business Plan" },
+  { id: 5, name: "Technical Quiz (Core Subject)" },
+  { id: 6, name: "Body Language" },
+  { id: 7, name: "Getting Ready for the Interview" },
+  { id: 8, name: "Mock Group Discussion" },
+  { id: 9, name: "Mock Interview" },
+  { id: 10, name: "Semester Practical" },
+  { id: 11, name: "General Soft Skills" },
+];
+
+const QUESTIONS = [
+// ─── TOPIC 1: Employers Expectation & Selection Process ──────────────────────
+{ t:1, q:"What is the primary objective of a selection process in any organisation?",
+  o:["To increase employee salary","To identify the best-fit candidate for a role","To evaluate current employees","To reduce staff strength"], a:1 },
+{ t:1, q:"Which of the following is NOT a stage in a typical recruitment selection process?",
+  o:["Aptitude test","Group discussion","Astrological assessment","Personal interview"], a:2 },
+{ t:1, q:"Employers typically assess 'soft skills' because:",
+  o:["They are harder to learn than technical skills","They replace the need for qualifications","They determine how effectively a person works with others","They are easier to test"], a:2 },
+{ t:1, q:"A 'competency-based interview' is designed to:",
+  o:["Test mathematical ability only","Assess specific skills through situational or behavioural questions","Evaluate physical fitness","Discuss salary expectations"], a:1 },
+{ t:1, q:"Which of the following best defines 'employer branding'?",
+  o:["A company's social media reach","The company's reputation as an employer and its employee value proposition","The logo design of a company","The advertising budget of an organisation"], a:1 },
+{ t:1, q:"Background verification during selection primarily checks:",
+  o:["Candidate's hobbies","Previous employment, education credentials, and criminal records","Travel history","Physical appearance"], a:1 },
+{ t:1, q:"Psychometric tests in a selection process are used to evaluate:",
+  o:["Technical proficiency alone","Physical strength","Personality traits and behavioural tendencies","Language skills exclusively"], a:2 },
+{ t:1, q:"The term 'shortlisting' in recruitment refers to:",
+  o:["Selecting candidates who meet minimum criteria for the next round","Final selection of a candidate","Issuing the offer letter","Conducting background verification"], a:0 },
+{ t:1, q:"Which type of interview involves multiple interviewers assessing one candidate simultaneously?",
+  o:["Telephonic interview","Panel interview","Exit interview","Walk-in interview"], a:1 },
+{ t:1, q:"'Campus recruitment' means:",
+  o:["Walk-in interviews at job fairs","Companies visiting educational institutions to hire students","Government recruitment drives","Online job portal postings"], a:1 },
+{ t:1, q:"What does the term 'attrition' refer to in an organisation?",
+  o:["The rate of employee promotion","The rate at which employees leave an organisation","Annual salary increment","Hiring of new employees"], a:1 },
+{ t:1, q:"An aptitude test during selection primarily assesses:",
+  o:["Physical fitness","Work experience","Logical reasoning, numerical ability, and problem-solving","Interpersonal skills only"], a:2 },
+{ t:1, q:"Which skill do most employers rank highest among fresh graduates?",
+  o:["Number of internships","Communication and teamwork skills","Social media following","Academic percentage alone"], a:1 },
+{ t:1, q:"What is 'onboarding' in the context of HR?",
+  o:["The process of firing employees","The process of integrating a new employee into the organisation","An interview technique","A type of aptitude test"], a:1 },
+{ t:1, q:"An employer conducting a 'stress interview' primarily aims to:",
+  o:["Make the candidate uncomfortable on purpose","Test the candidate's ability to remain composed under pressure","Evaluate technical knowledge","Assess physical endurance"], a:1 },
+
+// ─── TOPIC 2: Case Studies ────────────────────────────────────────────────────
+{ t:2, q:"What is the main purpose of a case study in professional training?",
+  o:["To memorise theoretical concepts","To analyse real-world problems and apply skills to solve them","To practise writing essays","To prepare for aptitude tests"], a:1 },
+{ t:2, q:"When analysing a case study, the FIRST step should be:",
+  o:["Jumping to a solution immediately","Identifying the central problem or issue","Writing a recommendation","Collecting data externally"], a:1 },
+{ t:2, q:"A SWOT analysis in a case study stands for:",
+  o:["Skills, Weaknesses, Objectives, Targets","Strengths, Weaknesses, Opportunities, Threats","Strategy, Work, Operations, Tasks","Systems, Workflow, Outcomes, Trends"], a:1 },
+{ t:2, q:"In a business case study, 'stakeholders' refer to:",
+  o:["Only the shareholders of a company","Anyone who has an interest in or is affected by the business outcome","Only employees of the organisation","The government regulatory bodies"], a:1 },
+{ t:2, q:"Which of the following is NOT a component of a well-structured case study analysis?",
+  o:["Problem identification","Root cause analysis","Random solution suggestions","Recommendation with justification"], a:2 },
+{ t:2, q:"The '5 Whys' technique in case studies is used to:",
+  o:["Identify five stakeholders","Drill down to the root cause of a problem","Generate five alternative solutions","Evaluate five financial metrics"], a:1 },
+{ t:2, q:"In case study discussions, critical thinking primarily involves:",
+  o:["Accepting the most popular opinion","Evaluating information objectively to form a reasoned judgement","Memorising case facts","Agreeing with the facilitator"], a:1 },
+{ t:2, q:"Which presentation format is most effective while presenting a case study solution?",
+  o:["Reading out paragraphs directly from notes","Structured presentation: problem → analysis → solution → outcome","Listing random facts","Presenting only financial data"], a:1 },
+{ t:2, q:"A 'Harvard Business School' case study is known for:",
+  o:["Pure theoretical lectures","Real-world business problems requiring analytical thinking","Simple textbook exercises","Technical programming challenges"], a:1 },
+{ t:2, q:"When multiple solutions are proposed in a case study, the best approach is to:",
+  o:["Accept the first suggested solution","Evaluate each solution against feasibility, cost, and impact","Ignore minority opinions","Choose the most creative option without analysis"], a:1 },
+{ t:2, q:"An 'elevator pitch' in case study presentations means:",
+  o:["A detailed 30-minute explanation","A concise and compelling summary delivered in 30–60 seconds","A pitch made inside an elevator literally","A written executive summary"], a:1 },
+{ t:2, q:"Root cause analysis (RCA) helps organisations to:",
+  o:["Add more employees","Identify the underlying reason for a problem, not just the symptoms","Increase product prices","Resolve interpersonal conflicts only"], a:1 },
+
+// ─── TOPIC 3: My Dream Employer ───────────────────────────────────────────────
+{ t:3, q:"Identifying your 'dream employer' primarily involves:",
+  o:["Applying to every company available","Aligning company values, culture, and role with your personal goals","Focusing only on salary","Choosing the most popular brand name"], a:1 },
+{ t:3, q:"Which of the following is the BEST way to research a potential employer?",
+  o:["Asking a friend who works there casually","Reviewing the company website, annual reports, Glassdoor reviews, and news","Searching only on social media","Relying on advertisements"], a:1 },
+{ t:3, q:"'Organisational culture' refers to:",
+  o:["The architecture of an office building","The shared values, beliefs, and practices of an organisation","The company's dress code only","The number of employees"], a:1 },
+{ t:3, q:"When evaluating a dream employer, which factor is most important for long-term job satisfaction?",
+  o:["Brand popularity","Growth opportunities, work culture, and role alignment","Proximity to home only","Number of holidays"], a:1 },
+{ t:3, q:"A company's 'mission statement' describes:",
+  o:["Financial targets for the year","The company's core purpose and reason for existence","Employee benefits package","Workplace safety rules"], a:1 },
+{ t:3, q:"Which of the following best defines a 'Fortune 500' company?",
+  o:["A company listed on a stock exchange","A list of the 500 largest US companies by revenue","A global top-500 technology list","A company with 500 or more employees"], a:1 },
+{ t:3, q:"'Work-life balance' as an employer value means:",
+  o:["Employees work 24/7","Providing flexibility and time for personal well-being alongside work","Offering high salaries only","Restricting personal time"], a:1 },
+{ t:3, q:"Which platform is most widely used to research employer reputation and employee reviews?",
+  o:["Pinterest","Glassdoor","Reddit","YouTube"], a:1 },
+{ t:3, q:"A company's CSR (Corporate Social Responsibility) activities reflect:",
+  o:["Its profit margin","Its commitment to social, environmental, and ethical responsibilities","Its marketing budget","Its recruitment process"], a:1 },
+{ t:3, q:"When setting career goals, the SMART framework stands for:",
+  o:["Simple, Measurable, Achievable, Realistic, Timely","Specific, Measurable, Achievable, Relevant, Time-bound","Strategic, Meaningful, Accurate, Reliable, Tested","Skilled, Motivated, Ambitious, Resourceful, Tactical"], a:1 },
+{ t:3, q:"'Employee value proposition (EVP)' refers to:",
+  o:["The salary package only","The set of offerings and benefits an employer provides in exchange for employee skills","The company's vision statement","The HR policy manual"], a:1 },
+{ t:3, q:"Which networking platform is most useful for identifying and connecting with dream employers?",
+  o:["Facebook","LinkedIn","Snapchat","WhatsApp"], a:1 },
+
+// ─── TOPIC 4: Business Plan ───────────────────────────────────────────────────
+{ t:4, q:"A business plan is primarily a document that:",
+  o:["Records daily office expenses","Outlines the goals, strategies, and financial projections of a business","Lists employee names","Describes the building layout of a company"], a:1 },
+{ t:4, q:"Which section of a business plan comes FIRST?",
+  o:["Financial projections","Market analysis","Executive summary","Operations plan"], a:2 },
+{ t:4, q:"A business plan's 'market analysis' section covers:",
+  o:["Internal HR policies","Research on target market, competitors, and industry trends","Product manufacturing process","Employee training plans"], a:1 },
+{ t:4, q:"The acronym 'USP' in a business plan stands for:",
+  o:["Unique Sales Proportion","Unlimited Sales Protocol","Unique Selling Proposition","Universal Strategy Plan"], a:2 },
+{ t:4, q:"'Break-even analysis' in a business plan determines:",
+  o:["The maximum profit achievable","The point at which revenue equals total costs","The market share of competitors","The company valuation"], a:1 },
+{ t:4, q:"A 'target market' in a business plan refers to:",
+  o:["All possible consumers worldwide","A specific group of consumers the business aims to serve","The company's investors","The suppliers of raw materials"], a:1 },
+{ t:4, q:"Which of the following is part of the 'operations plan' in a business plan?",
+  o:["Competitor analysis","Financial forecasting","Day-to-day processes and supply chain management","Brand marketing strategy"], a:2 },
+{ t:4, q:"'Seed funding' for a startup refers to:",
+  o:["Government grants only","Initial capital raised to start or early-stage develop a business","Revenue from product sales","Funding from public stock markets"], a:1 },
+{ t:4, q:"An 'elevator pitch' for a business plan should be:",
+  o:["Detailed and comprehensive","A brief, compelling overview of the business idea in under 2 minutes","Technical and data-heavy","Focused only on financial numbers"], a:1 },
+{ t:4, q:"The 'business model canvas' was developed by:",
+  o:["Peter Drucker","Alexander Osterwalder","Michael Porter","Philip Kotler"], a:1 },
+{ t:4, q:"ROI in a business plan stands for:",
+  o:["Rate of Investment","Return on Investment","Risk of Initiation","Revenue of Interest"], a:1 },
+{ t:4, q:"A competitive analysis in a business plan helps to:",
+  o:["Find new employees","Understand the strengths and weaknesses of competitors and identify market gaps","Set employee salaries","Determine manufacturing costs"], a:1 },
+{ t:4, q:"Which of the following is NOT typically included in a business plan?",
+  o:["Executive summary","Market analysis","Personal diary entries","Financial projections"], a:2 },
+{ t:4, q:"'Cash flow statement' in a business plan shows:",
+  o:["Total profit of the year","Inflows and outflows of cash over a period","The value of company assets","Number of employees hired"], a:1 },
+
+// ─── TOPIC 5: Technical Quiz / Core Subject ───────────────────────────────────
+{ t:5, q:"Which data structure operates on a LIFO (Last In, First Out) principle?",
+  o:["Queue","Stack","Linked list","Tree"], a:1 },
+{ t:5, q:"What does 'OOP' stand for in programming?",
+  o:["Object-Oriented Programming","Open Operator Protocol","Organised Offline Processing","Output-Oriented Practice"], a:0 },
+{ t:5, q:"In a relational database, a 'primary key' is:",
+  o:["A password for the database","A unique identifier for each record in a table","A foreign table reference","A duplicate field"], a:1 },
+{ t:5, q:"What does the HTTP status code '404' indicate?",
+  o:["Server error","Forbidden access","Resource not found","Redirect"], a:2 },
+{ t:5, q:"Which sorting algorithm has the best average-case time complexity?",
+  o:["Bubble sort","Selection sort","Merge sort","Insertion sort"], a:2 },
+{ t:5, q:"What is the full form of 'API'?",
+  o:["Automated Programming Interface","Application Programming Interface","Applied Protocol Integration","Advanced Programming Index"], a:1 },
+{ t:5, q:"In networking, what does 'IP' stand for?",
+  o:["Internal Protocol","Internet Protocol","Integrated Procedure","Input Port"], a:1 },
+{ t:5, q:"Which programming paradigm uses concepts like inheritance, encapsulation, and polymorphism?",
+  o:["Procedural programming","Functional programming","Object-oriented programming","Logic programming"], a:2 },
+{ t:5, q:"The binary representation of decimal number 10 is:",
+  o:["1010","1100","1001","0110"], a:0 },
+{ t:5, q:"Which of the following is a NoSQL database?",
+  o:["MySQL","Oracle","MongoDB","PostgreSQL"], a:2 },
+
+// ─── TOPIC 6: Body Language ───────────────────────────────────────────────────
+{ t:6, q:"What percentage of communication is conveyed through body language, according to Albert Mehrabian's research?",
+  o:["7%","38%","55%","93%"], a:2 },
+{ t:6, q:"Maintaining eye contact during a conversation signals:",
+  o:["Aggression","Confidence and engagement","Boredom","Dishonesty"], a:1 },
+{ t:6, q:"Crossing arms during a conversation typically conveys:",
+  o:["Openness and warmth","Agreement with the speaker","Defensiveness or closed-off attitude","Enthusiasm"], a:2 },
+{ t:6, q:"A firm handshake in a professional setting indicates:",
+  o:["Over-confidence","Weakness","Confidence and professionalism","Nervousness"], a:2 },
+{ t:6, q:"Which of the following is a positive body language cue during an interview?",
+  o:["Slouching in the chair","Avoiding eye contact","Nodding while listening","Tapping fingers on the table"], a:2 },
+{ t:6, q:"'Proxemics' in body language refers to:",
+  o:["The tone of voice","The use of personal space in communication","Hand gestures","Facial expressions"], a:1 },
+{ t:6, q:"Mirroring someone's body language in a conversation tends to:",
+  o:["Create discomfort","Build rapport and establish connection","Signal disagreement","Indicate nervousness"], a:1 },
+{ t:6, q:"Which facial expression is considered universally understood across cultures?",
+  o:["A wink","A nod","A smile","A raised eyebrow"], a:2 },
+{ t:6, q:"In an interview, frequently looking at the floor or ceiling suggests:",
+  o:["Deep thinking","Confidence","Lack of confidence or disinterest","Excellent focus"], a:2 },
+{ t:6, q:"Which of the following is an example of a 'power pose'?",
+  o:["Standing with hands clasped behind the back","Sitting with arms wide and feet planted firmly","Hunching forward with arms crossed","Standing with feet together and eyes downcast"], a:1 },
+{ t:6, q:"'Haptics' in non-verbal communication refers to:",
+  o:["Eye movement","Touch as a form of communication","Spatial distance","Voice pitch"], a:1 },
+{ t:6, q:"Leaning slightly forward during a conversation typically signals:",
+  o:["Disinterest","Aggression","Attention and engagement","Tiredness"], a:2 },
+{ t:6, q:"Which of the following voice qualities is part of paralanguage?",
+  o:["Eye contact","Tone, pitch, and pace of speech","Posture","Personal space"], a:1 },
+{ t:6, q:"A genuine smile, involving the muscles around the eyes, is known as a:",
+  o:["Duchenne smile","Polite smile","Social smile","Greeting smile"], a:0 },
+
+// ─── TOPIC 7: Getting Ready for the Interview ─────────────────────────────────
+{ t:7, q:"How far in advance should you typically arrive for an in-person interview?",
+  o:["30 minutes early","10–15 minutes early","Exactly on time","5 minutes late"], a:1 },
+{ t:7, q:"Before attending an interview, researching the company is important because:",
+  o:["It impresses the interviewer with your preparation and genuine interest","It is not necessary for technical roles","You can avoid answering questions","It helps you negotiate a higher salary immediately"], a:0 },
+{ t:7, q:"Which attire is generally most appropriate for a formal job interview?",
+  o:["Casual jeans and a t-shirt","Smart formals or business professional attire","Sports wear","Traditional festival wear"], a:1 },
+{ t:7, q:"A common opening question in interviews is 'Tell me about yourself.' The best response should:",
+  o:["Cover your entire personal history","Be a 2–3 minute professional summary of background, skills, and aspirations","Focus only on hobbies","Discuss salary expectations"], a:1 },
+{ t:7, q:"When asked 'What is your greatest weakness?' the ideal response is to:",
+  o:["Claim you have no weaknesses","Mention a major professional flaw without solution","Identify a real weakness and explain how you are working to improve it","Redirect the question entirely"], a:2 },
+{ t:7, q:"The STAR method used in interviews stands for:",
+  o:["Skills, Tasks, Action, Result","Situation, Task, Action, Result","Strategy, Team, Approach, Review","Subject, Time, Activity, Role"], a:1 },
+{ t:7, q:"Why should you prepare questions to ask the interviewer?",
+  o:["To show dominance","To demonstrate genuine interest and evaluate if the role suits you","It is not necessary","To fill time at the end"], a:1 },
+{ t:7, q:"Following up after an interview with a thank-you email should be done within:",
+  o:["One week","One month","24–48 hours","Only if asked"], a:0 },
+{ t:7, q:"Which of the following is a red flag behaviour during an interview?",
+  o:["Speaking confidently","Asking about the company's growth","Badmouthing a previous employer","Maintaining eye contact"], a:2 },
+{ t:7, q:"What does 'active listening' during an interview demonstrate?",
+  o:["You are waiting for your turn to speak","Respect, attentiveness, and genuine interest","Nervousness","A lack of preparation"], a:1 },
+{ t:7, q:"Practising mock interviews primarily helps to:",
+  o:["Memorise scripts word for word","Build confidence, reduce anxiety, and improve delivery","Avoid spontaneous answers","Impress only through appearance"], a:1 },
+{ t:7, q:"Which of the following is NOT appropriate to ask during a first interview?",
+  o:["What are the key responsibilities of this role?","How does the company support employee development?","What is the exact starting salary and benefits package?","Can you describe the team I would be working with?"], a:2 },
+{ t:7, q:"Your digital presence (LinkedIn, social media) before an interview should:",
+  o:["Be completely deleted","Be professional and consistent with your resume","Be filled with personal opinions","Have no photo"], a:1 },
+{ t:7, q:"What is a 'portfolio' in the context of interview preparation?",
+  o:["A briefcase you carry","A collection of work samples that demonstrate your skills and achievements","A formal certificate folder","A list of references"], a:1 },
+{ t:7, q:"Before a virtual interview, which of the following is most important to check?",
+  o:["Your hairstyle only","Internet connection, background, lighting, and technology setup","Number of questions prepared","Salary benchmark research"], a:1 },
+
+// ─── TOPIC 8: Mock Group Discussion ───────────────────────────────────────────
+{ t:8, q:"The primary objective of a Group Discussion (GD) in a selection process is to:",
+  o:["Test public speaking skills only","Assess communication, leadership, teamwork, and critical thinking","Determine the most extroverted candidate","Check academic knowledge"], a:1 },
+{ t:8, q:"Which of the following is the ideal role to assume in a GD?",
+  o:["Stay completely silent and observe","Dominate the discussion and shut down others","Be an active participant who listens, contributes, and builds on others' points","Agree with everyone to avoid conflict"], a:2 },
+{ t:8, q:"'Initiating a GD' means:",
+  o:["Interrupting another speaker","Being the first to introduce and frame the topic confidently","Summarising the discussion at the end","Asking a question to the assessor"], a:1 },
+{ t:8, q:"Which behaviour is considered negative in a GD?",
+  o:["Citing relevant data and examples","Interrupting others repeatedly and speaking over them","Acknowledging a peer's valid point","Summarising key points at the end"], a:1 },
+{ t:8, q:"The ideal duration for each speaker's turn in a GD is approximately:",
+  o:["5–10 minutes","30–60 seconds to 1–2 minutes per contribution","10–15 minutes","Speak as long as possible"], a:1 },
+{ t:8, q:"What does 'fishy transition' mean in GD terminology?",
+  o:["A creative way to summarise","A sudden irrelevant change of topic","A conflict between participants","A formal debate technique"], a:1 },
+{ t:8, q:"A GD topic that starts with 'Should India…' is typically a _____ type topic.",
+  o:["Abstract","Factual","Controversial/policy-based","Case study-based"], a:2 },
+{ t:8, q:"Which of the following is a positive quality assessed during a GD?",
+  o:["Speaking in a regional language only","Ability to persuade others to change the topic","Structured communication with logical flow","Agreeing with majority without reasoning"], a:2 },
+{ t:8, q:"'Summarising a GD' refers to:",
+  o:["Giving your final opinion forcefully","Presenting a balanced conclusion covering all major points discussed","Repeating your own points","Listing all participant names"], a:1 },
+{ t:8, q:"In a GD, using gestures and eye contact with all participants demonstrates:",
+  o:["Arrogance","Distraction","Inclusiveness and confident communication","Submission"], a:2 },
+{ t:8, q:"Which of the following topics is an example of an 'abstract' GD topic?",
+  o:["Should social media be regulated?","Blue is the warmest colour","Should India ban cryptocurrency?","Work from home vs. office"], a:1 },
+{ t:8, q:"When you strongly disagree with a point in a GD, the best approach is to:",
+  o:["Remain silent","Raise your voice to emphasise your point","Politely present counter-arguments backed with evidence","Walk out of the discussion"], a:2 },
+{ t:8, q:"Non-verbal communication in a GD includes all EXCEPT:",
+  o:["Posture","Eye contact","Vocabulary used","Facial expressions"], a:2 },
+{ t:8, q:"A 'fish market GD' refers to a situation where:",
+  o:["The topic is related to economics","All participants speak simultaneously with no order","Only two candidates debate","The discussion is very structured"], a:1 },
+
+// ─── TOPIC 9: Mock Interview ──────────────────────────────────────────────────
+{ t:9, q:"The main goal of a mock interview is to:",
+  o:["Get a guaranteed job offer","Simulate the real interview environment to improve performance","Memorise exact answers","Impress trainers only"], a:1 },
+{ t:9, q:"Feedback after a mock interview should be:",
+  o:["Ignored if it is negative","Taken personally","Received constructively and used to improve","Only given if positive"], a:2 },
+{ t:9, q:"Which of the following best defines a 'behavioural interview question'?",
+  o:["A question about your physical appearance","A question asking you to describe a past situation using STAR format","A technical coding question","A question about your favourite food"], a:1 },
+{ t:9, q:"In a mock interview, maintaining a steady pace while speaking shows:",
+  o:["Nervousness","Confidence and composure","Lack of preparation","Hurry to finish"], a:1 },
+{ t:9, q:"Which response technique is best for 'Tell me about a challenge you faced at work'?",
+  o:["Avoid giving any specific example","Use the STAR method – Situation, Task, Action, Result","Talk generally without specific details","Blame the organisation for the challenge"], a:1 },
+{ t:9, q:"What does 'salary negotiation' in an interview involve?",
+  o:["Accepting whatever is offered without question","Refusing to discuss salary","Professionally discussing compensation expectations based on market research","Demanding the highest industry salary aggressively"], a:2 },
+{ t:9, q:"When an interviewer asks 'Where do you see yourself in 5 years?', the ideal answer should:",
+  o:["Say you want the interviewer's job","Express genuine ambition aligned with the company's growth opportunities","Mention personal life goals only","Admit you have no plans"], a:1 },
+{ t:9, q:"The 'halo effect' in an interview refers to:",
+  o:["Candidate wearing shiny jewellery","One positive trait influencing the overall positive perception of a candidate","Multiple interviewers praising simultaneously","Virtual interview lighting effect"], a:1 },
+{ t:9, q:"Pausing briefly before answering a difficult interview question is:",
+  o:["A sign of ignorance","Unprofessional","Acceptable — it shows thoughtfulness and composure","An indication of nervousness only"], a:2 },
+{ t:9, q:"What does 'cultural fit' mean in the context of a job interview?",
+  o:["Having knowledge of world cultures","How well a candidate's values align with the company's culture","Knowing multiple languages","Having worked in different countries"], a:1 },
+{ t:9, q:"When asked 'Why should we hire you?', the ideal response highlights:",
+  o:["Your personal needs for the job","Unique skills and experiences that directly benefit the company's requirements","How much you disliked your previous job","Why other candidates are less qualified"], a:1 },
+{ t:9, q:"During a mock interview, poor posture such as slumping communicates:",
+  o:["Comfort and ease","Confidence","Lack of interest or low confidence","Intelligence"], a:2 },
+{ t:9, q:"Which of the following is an example of an 'open-ended' interview question?",
+  o:["Did you enjoy your previous job?","How many years of experience do you have?","Describe a time you demonstrated leadership skills.","Are you comfortable with travelling?"], a:2 },
+{ t:9, q:"The best way to handle a question you do not know the answer to in an interview is:",
+  o:["Fake an answer confidently","Stay silent and look down","Honestly acknowledge the gap and explain how you would find the answer","Immediately change the topic"], a:2 },
+{ t:9, q:"Which of the following should you avoid during the closing of an interview?",
+  o:["Thanking the interviewer","Expressing continued interest in the role","Asking about rejection criteria aggressively","Asking about next steps in the process"], a:2 },
+
+// ─── TOPIC 10: Semester Practical Skills ──────────────────────────────────────
+{ t:10, q:"An effective resume should primarily be:",
+  o:["As long as possible to showcase everything","Concise, tailored to the job, and free of errors","Filled with personal information","Decorated with bright colours"], a:1 },
+{ t:10, q:"Which section of a resume comes immediately after the contact details?",
+  o:["References","Work experience","Professional summary or objective","Hobbies"], a:2 },
+{ t:10, q:"The recommended resume length for a fresher is:",
+  o:["3–4 pages","5 pages","1 page","As many pages as needed"], a:2 },
+{ t:10, q:"What is the purpose of a 'cover letter' accompanying a resume?",
+  o:["To repeat the resume in full","To introduce yourself and express specific interest in the role and company","To list your salary expectations only","To include personal photographs"], a:1 },
+{ t:10, q:"Which format is most widely accepted for sending a resume digitally?",
+  o:["PNG image","PDF format","Excel spreadsheet","Text file (.txt)"], a:1 },
+{ t:10, q:"Action verbs in a resume (e.g., 'Led', 'Developed', 'Managed') are used to:",
+  o:["Make the resume longer","Describe your experiences with impact and clarity","Replace technical skills","Meet word count requirements"], a:1 },
+{ t:10, q:"The objective statement in a resume should be:",
+  o:["Generic and suitable for all jobs","Specific, mentioning the role and how you add value","A list of your hobbies","A copy of your exam scores"], a:1 },
+{ t:10, q:"Which of the following should NOT be included in a professional resume?",
+  o:["Education details","Relevant work experience","Date of birth and religion","Skills and certifications"], a:2 },
+{ t:10, q:"A 'LinkedIn profile' for a job seeker should:",
+  o:["Be different from the resume to avoid duplication","Be professional, consistent with the resume, and have a clear headshot","Include personal opinions on politics","Remain incomplete"], a:1 },
+{ t:10, q:"Proofreading your resume before submission is important because:",
+  o:["It adds length","Spelling and grammatical errors create a negative first impression","Formatting does not matter","It guarantees a job offer"], a:1 },
+
+// ─── TOPIC 11: General Soft Skills ────────────────────────────────────────────
+{ t:11, q:"Emotional intelligence (EI) in the workplace primarily refers to:",
+  o:["Intelligence quotient score","The ability to recognise, manage, and effectively use emotions in oneself and others","Technical skill level","Academic performance"], a:1 },
+{ t:11, q:"Which of the following best describes 'active listening'?",
+  o:["Listening while multitasking","Fully concentrating, understanding, and responding thoughtfully to the speaker","Nodding without paying attention","Waiting for your turn to speak"], a:1 },
+{ t:11, q:"'Time management' as a soft skill involves:",
+  o:["Working as many hours as possible","Prioritising tasks, setting deadlines, and eliminating time wasters","Avoiding difficult tasks","Delegating all tasks to others"], a:1 },
+{ t:11, q:"Conflict resolution in the workplace means:",
+  o:["Avoiding conflict at all costs","Addressing disagreements constructively to reach a mutually acceptable solution","Taking sides with the majority","Escalating every issue to management"], a:1 },
+{ t:11, q:"Which of the following is a key characteristic of a good team player?",
+  o:["Taking all credit for group success","Undermining teammates to stand out","Communicating openly, sharing responsibility, and supporting team goals","Working entirely independently"], a:2 },
+{ t:11, q:"'Growth mindset' (coined by Carol Dweck) refers to the belief that:",
+  o:["Intelligence is fixed and cannot change","Skills and abilities can be developed through effort and learning","Success depends only on innate talent","Failure is permanent"], a:1 },
+{ t:11, q:"Assertive communication means:",
+  o:["Being aggressive and forceful","Expressing thoughts and feelings confidently while respecting others","Always agreeing to avoid conflict","Being passive and avoiding opinions"], a:1 },
+{ t:11, q:"Which of the following is NOT a component of Daniel Goleman's Emotional Intelligence model?",
+  o:["Self-awareness","Empathy","Logical reasoning","Social skills"], a:2 },
+{ t:11, q:"Networking as a professional skill primarily involves:",
+  o:["Collecting as many business cards as possible","Building genuine professional relationships that are mutually beneficial","Promoting only yourself","Avoiding online platforms"], a:1 },
+];
+
+let userAnswers = {};
+let revealed = false;
+let timerInterval;
+let elapsed = 0;
+let activeFilter = 0;
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    elapsed++;
+    const m = String(Math.floor(elapsed/60)).padStart(2,'0');
+    const s = String(elapsed%60).padStart(2,'0');
+    document.getElementById('timer').textContent = '⏱ '+m+':'+s;
+  }, 1000);
+}
+
+function getFiltered() {
+  if (activeFilter === 0) return QUESTIONS;
+  return QUESTIONS.filter(q => q.t === activeFilter);
+}
+
+function buildFilters() {
+  const row = document.getElementById('filterRow');
+  let html = '<button class="topic-btn active" onclick="setFilter(0,this)">All Topics</button>';
+  TOPICS.forEach(t => {
+    const count = QUESTIONS.filter(q=>q.t===t.id).length;
+    html += `<button class="topic-btn" onclick="setFilter(${t.id},this)">T${t.id} (${count})</button>`;
+  });
+  row.innerHTML = html;
+}
+
+function setFilter(tid, el) {
+  activeFilter = tid;
+  document.querySelectorAll('.topic-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderQuestions();
+}
+
+function renderQuestions() {
+  const qs = getFiltered();
+  const container = document.getElementById('qContainer');
+  let html = '';
+  let curTopic = null;
+  qs.forEach((q, localIdx) => {
+    const globalIdx = QUESTIONS.indexOf(q);
+    if (q.t !== curTopic) {
+      curTopic = q.t;
+      const tp = TOPICS.find(t=>t.id===q.t);
+      html += `<div class="section-header">Topic ${q.t}: ${tp.name} <span>(${qs.filter(x=>x.t===q.t).length} Questions)</span></div>`;
+    }
+    const ua = userAnswers[globalIdx];
+    let cardClass = '';
+    if (revealed) {
+      if (ua !== undefined) cardClass = ua===q.a ? 'correct-ans' : 'wrong-ans';
+    }
+    html += `<div class="q-card ${cardClass}" id="card-${globalIdx}">
+      <div class="q-num">Q${globalIdx+1}.</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options">`;
+    q.o.forEach((opt, oi) => {
+      let cls = '';
+      if (ua === oi) cls = 'selected';
+      if (revealed) {
+        if (oi === q.a) cls = 'correct';
+        else if (ua === oi && ua !== q.a) cls = 'wrong';
+      }
+      html += `<div class="opt ${cls}" onclick="selectAnswer(${globalIdx},${oi})">
+        <span class="opt-letter">${String.fromCharCode(65+oi)})</span>
+        <span>${opt}</span>
+      </div>`;
+    });
+    html += `</div>`;
+    if (revealed) {
+      html += `<div class="explanation" id="exp-${globalIdx}" style="display:block">✔ Correct answer: <strong>${String.fromCharCode(65+q.a)}) ${q.o[q.a]}</strong></div>`;
+    }
+    html += `</div>`;
+  });
+  container.innerHTML = html;
+  updateProgress();
+}
+
+function selectAnswer(idx, optIdx) {
+  if (revealed) return;
+  userAnswers[idx] = optIdx;
+  const card = document.getElementById('card-'+idx);
+  card.querySelectorAll('.opt').forEach((el,i)=>{
+    el.classList.toggle('selected', i===optIdx);
+  });
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = QUESTIONS.length;
+  const answered = Object.keys(userAnswers).length;
+  document.getElementById('progress').textContent = `Answered: ${answered} / ${total}`;
+}
+
+function revealAll() {
+  revealed = true;
+  renderQuestions();
+  calcScore(true);
+}
+
+function calcScore(show) {
+  let correct = 0, wrong = 0, skipped = 0;
+  QUESTIONS.forEach((q,i)=>{
+    if (userAnswers[i]===undefined) skipped++;
+    else if (userAnswers[i]===q.a) correct++;
+    else wrong++;
+  });
+  const pct = Math.round((correct/QUESTIONS.length)*100);
+  if (show) {
+    document.getElementById('scoreBox').style.display='block';
+    document.getElementById('scoreBox').textContent=`Score: ${correct} / ${QUESTIONS.length}`;
+    const sum = document.getElementById('summary');
+    sum.style.display='block';
+    document.getElementById('sumPct').textContent=pct+'%';
+    let grade = pct>=90?'Excellent! Outstanding performance.':pct>=75?'Very Good! Keep it up.':pct>=60?'Good. Review weak areas.':pct>=40?'Average. More practice needed.':'Needs Improvement. Revise all topics.';
+    document.getElementById('sumGrade').textContent=grade;
+    document.getElementById('sumC').textContent=`✔ Correct: ${correct}`;
+    document.getElementById('sumW').textContent=`✘ Wrong: ${wrong}`;
+    document.getElementById('sumS').textContent=`– Skipped: ${skipped}`;
+    sum.scrollIntoView({behavior:'smooth'});
+    clearInterval(timerInterval);
+  }
+}
+
+function submitExam() {
+  const answered = Object.keys(userAnswers).length;
+  if (answered < QUESTIONS.length) {
+    if (!confirm(`You have answered ${answered} of ${QUESTIONS.length} questions. Submit anyway?`)) return;
+  }
+  revealAll();
+}
+
+function resetAll() {
+  if (!confirm('Reset all answers? This cannot be undone.')) return;
+  userAnswers = {};
+  revealed = false;
+  elapsed = 0;
+  clearInterval(timerInterval);
+  startTimer();
+  document.getElementById('scoreBox').style.display='none';
+  document.getElementById('summary').style.display='none';
+  activeFilter = 0;
+  document.querySelectorAll('.topic-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  renderQuestions();
+}
+
+function toggleAll() {
+  activeFilter = 0;
+  document.querySelectorAll('.topic-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  renderQuestions();
+}
+
+window.addEventListener('scroll', () => {
+  document.getElementById('topBtn').style.display = window.scrollY > 300 ? 'block' : 'none';
+});
+
+buildFilters();
+renderQuestions();
+startTimer();
+</script>
+</body>
+</html>
